@@ -18,6 +18,7 @@
                 <div class="card card-primary card-outline">
                   <div class="card-header">
                     <h5 class="card-title m-0"></h5>
+                    
                     <button class="float-right btn btn-sm btn-outline-primary" id="btnCreate">Create New Policy</button>
                   </div>
                   <div class="card-body">
@@ -123,22 +124,13 @@
 <script>
 $(document).ready(function() {
     let dataTable = $('#table-policy').DataTable({
-        // processing: true,
-        // servrside: true,
+        processing: true,
+        servrside: true,
+        scrollX: true,
         ajax: {
             url:"<?= base_url('policy/new') ?>",
-            // type: 'POST',
           },
-        // columns: [
-        //     {data: 'no', orderable: false},
-        //     {data: 'nama_nasabah'},
-        //     {data: 'periode_pertanggungan'},
-        //     {data: 'kendaraan'},
-        //     {data: 'harga'},
-        //     {data: 'jenis'},
-        //     {data: 'resiko'},
-        //     {data: 'action', orderable: false},
-        // ]
+    
     });
 
     $('#btnCreate').click(function () {
@@ -194,16 +186,16 @@ $(document).ready(function() {
                         customClass: { confirmButton: "btn btn-success" },
                         buttonsStyling: !1,
                     });
-                    table.draw();
+                    $('#table-policy').DataTable().ajax.reload(null, false);
                 },
-                error: function(response){
-                    $('#simpan').html('Submit');
-                    $('#policyForm').find(".print-error-msg").find("ul").html('');
-                    $('#policyForm').find(".print-error-msg").css('display','block');
-                    $.each( response.responseJSON.errors, function( key, value ) {
-                        $('#policyForm').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-                    });
-                }
+                // error: function(response){
+                //     $('#simpan').html('Submit');
+                //     $('#policyForm').find(".print-error-msg").find("ul").html('');
+                //     $('#policyForm').find(".print-error-msg").css('display','block');
+                //     $.each( response.responseJSON.errors, function( key, value ) {
+                //         $('#policyForm').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                //     });
+                // }
         });
     });
 

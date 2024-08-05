@@ -62,7 +62,9 @@ class Policy extends BaseController
                 'db'=>'id',
                 'dt'=>7,
                 'formatter'=>function($d, $row){
-                    return 'Print | Delete';
+                    return '<a href="" class="btn btn-xs btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a> &nbsp;
+                            <a href="" class="btn btn-xs btn-outline-success" title="Cetak"><i class="fas fa-print"></i></a> &nbsp; 
+                            <button class="btn btn-xs btn-outline-danger" title="Hapus"><i class="fas fa-trash"></i></button>';
                 }
             ),
         );
