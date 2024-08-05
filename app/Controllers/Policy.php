@@ -6,6 +6,10 @@ use Hermawan\DataTables\DataTable;
 
 class Policy extends BaseController
 {   
+    public function __construct(){
+        require_once APPPATH.'ThirdParty/ssp.php';
+        $this->db = db_connect();
+    }
     public function index()
     {   
         $title = [
@@ -16,15 +20,56 @@ class Policy extends BaseController
 
     public function new()
     {
-        $db = db_connect();
-        $builder = $db->table('policys')->select('nama_nasabah','periode_pertanggungan','kendaraan','harga','jenis','resiko');
+        $dbDetails = array(
+            "host" =>$this->db->hostname,
+            "user" =>$this->db->username,
+            "pass" =>$this->db->password,
+            "db" =>$this->db->database,
+        );
+        $table = "policys";
+        $primaryKey = 'id';
 
-        return DataTable::of($builder)
-                        ->add('action', function($r){
-                            return '<button type="button" class="btn btn-primary btn-sm" id="'.$r->id.'" ><i class="fas fa-edit"></i></button>';
-                        })
-                        ->addNumbering('no')
-                        ->toJson();
+        $columns = array(
+            array(
+                'db'=>'id',
+                'dt'=>0,
+            ),
+            array(
+                'db'=>'nama_nasabah',
+                'dt'=>1,
+            ),
+            array(
+                'db'=>'periode_pertanggungan',
+                'dt'=>2,
+            ),
+            array(
+                'db'=>'kendaraan',
+                'dt'=>3,
+            ),
+            array(
+                'db'=>'harga',
+                'dt'=>4,
+            ),
+            array(
+                'db'=>'jenis',
+                'dt'=>5,
+            ),
+            array(
+                'db'=>'resiko',
+                'dt'=>6,
+            ),
+            array(
+                'db'=>'id',
+                'dt'=>7,
+                'formatter'=>function($d, $row){
+                    return 'Print | Delete';
+                }
+            ),
+        );
+
+        echo json_encode(
+            \SSP::simple($_GET, $dbDetails, $table, $primaryKey, $columns)
+        );
     }
 
     public function create() {

@@ -123,22 +123,22 @@
 <script>
 $(document).ready(function() {
     let dataTable = $('#table-policy').DataTable({
-        processing: true,
-        servrside: true,
+        // processing: true,
+        // servrside: true,
         ajax: {
             url:"<?= base_url('policy/new') ?>",
             // type: 'POST',
           },
-        columns: [
-            {data: 'no', orderable: false},
-            {data: 'nama_nasabah'},
-            {data: 'periode_pertanggungan'},
-            {data: 'kendaraan'},
-            {data: 'harga'},
-            {data: 'jenis'},
-            {data: 'resiko'},
-            {data: 'action', orderable: false},
-        ]
+        // columns: [
+        //     {data: 'no', orderable: false},
+        //     {data: 'nama_nasabah'},
+        //     {data: 'periode_pertanggungan'},
+        //     {data: 'kendaraan'},
+        //     {data: 'harga'},
+        //     {data: 'jenis'},
+        //     {data: 'resiko'},
+        //     {data: 'action', orderable: false},
+        // ]
     });
 
     $('#btnCreate').click(function () {
