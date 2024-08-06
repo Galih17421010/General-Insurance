@@ -22,7 +22,7 @@
                     <button class="float-right btn btn-sm btn-outline-primary" id="btnCreate">Create New Policy</button>
                   </div>
                   <div class="card-body">
-                    <table class="table table-bordered table-responsive" id="table-policy">
+                    <table class="table table-bordered table-hover" id="table-policy">
                         <thead>
                             <tr>
                                 <th>No</th>

@@ -9,20 +9,21 @@
     </button>
     <div class="collapse navbar-collapse order-3" id="navbarCollapse">
       <ul class="navbar-nav">
-        <li class="nav-item" >
-          <a href="/" class="nav-link">Home</a>
+        <li class="nav-item " >
+          <a href="<?= base_url('/'); ?>" class="nav-link">Home</a>
         </li>
         <li class="nav-item">
-          <a href="/policy" class="nav-link">Polis</a>
+          <a href="<?= base_url('/policy'); ?>" class="nav-link">Polis</a>
         </li>
       </ul>
     </div>
 
     <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
+      <li class="nav-item dropdown">
+        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><?= $_SESSION['name']; ?></a>
+          <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+            <li><a href="<?= base_url('/logout'); ?>" class="dropdown-item">Log Out</a></li>
+          </ul>
       </li>
     </ul>
   </div>

@@ -54,11 +54,15 @@
                         <div class="card-body">
                         <p class="login-box-msg">Log in to Access</p>
 
-                       
+                        <?php if(session()->getFlashdata('msg')):?>
+                            <div class="alert alert-warning">
+                              <?= session()->getFlashdata('msg') ?>
+                            </div>
+                        <?php endif;?>
 
-                        <form action="login" method="post"><?= csrf_field(); ?>
+                        <form action="<?php echo base_url(); ?>/Login/loginAuth" method="post">
                             <div class="input-group mb-3">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Email"   required>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -66,7 +70,7 @@
                             </div>
                             </div>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" name="password" id="password" id="showPassword" placeholder="Password" required>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -106,7 +110,7 @@
 
 <script>
 function show() {
-  var x = document.getElementById("showPassword");
+  var x = document.getElementById("password");
   if (x.type === "password") {
     x.type = "text";
   } else {

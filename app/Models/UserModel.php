@@ -17,23 +17,12 @@ class UserModel extends Model
     protected $allowedFields    = ['name', 'email', 'password'];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
-    protected $validationRules      = [
-        'uname' => 'required',
-        'password' => 'required|min_length[8]',
-        'email'    => 'required|valid_email',
-    ];
-    protected $validationMessages   = [
-        'uname' => 'username required',
-        'password' => 'password required',
-        'email' => 'email required',
-    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -47,19 +36,5 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function createUser($param = array())
-    {
-        $password = password_hash($param['password'], PASSWORD_BCRYPT);
-        $data = ['name' => $param['name'], 'email' => $param['email'], 'password' => $password];
-        $this->save($data);
-
-        return true;
-    }
-
-    public function verifyUser($email, $password)
-    {
-        return $this->table($this->table)->where('email', $email)->get();
-    }
 
 }

@@ -9,9 +9,10 @@ use CodeIgniter\Router\RouteCollection;
 
 
 
-$routes->get('/login', 'Login::index');
+$routes->get('login', 'Login::index', ['filter' => 'guestGuard']);
+$routes->match(['get', 'post'], 'Login/loginAuth', 'Login::loginAuth');
+$routes->get('/logout', 'Login::logout');
 
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Home::index', ['filter' => 'authGuard']);
 
-$routes->resource('policy', [Policy::class]);
-// $routes->post('/policy/data', 'Policy::getData');
+$routes->resource('policy', [Policy::class,'filter' => 'authGuard']);
