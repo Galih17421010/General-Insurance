@@ -30,43 +30,20 @@ class Policy extends BaseController
         $primaryKey = 'id';
 
         $columns = array(
-            array(
-                'db'=>'id',
-                'dt'=>0,
-            ),
-            array(
-                'db'=>'nama_nasabah',
-                'dt'=>1,
-            ),
-            array(
-                'db'=>'periode_pertanggungan',
-                'dt'=>2,
-            ),
-            array(
-                'db'=>'kendaraan',
-                'dt'=>3,
-            ),
-            array(
-                'db'=>'harga',
-                'dt'=>4,
-            ),
-            array(
-                'db'=>'jenis',
-                'dt'=>5,
-            ),
-            array(
-                'db'=>'resiko',
-                'dt'=>6,
-            ),
-            array(
-                'db'=>'id',
-                'dt'=>7,
-                'formatter'=>function($d, $row){
-                    return '<a href="" class="btn btn-xs btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a> &nbsp;
-                            <a href="" class="btn btn-xs btn-outline-success" title="Cetak"><i class="fas fa-print"></i></a> &nbsp; 
-                            <button class="btn btn-xs btn-outline-danger" title="Hapus"><i class="fas fa-trash"></i></button>';
-                }
-            ),
+            array( 'db'=>'id', 'dt'=>0 ),
+            array( 'db'=>'nama_nasabah', 'dt'=>1 ),
+            array( 'db'=>'periode_pertanggungan', 'dt'=>2 ),
+            array( 'db'=>'kendaraan', 'dt'=>3 ),
+            array( 'db'=>'harga', 'dt'=>4 ),
+            array( 'db'=>'jenis', 'dt'=>5 ),
+            array( 'db'=>'resiko', 'dt'=>6 ),
+            array( 'db'=>'id', 'dt'=>7,
+                    'formatter'=>function($d, $row){
+                        return '<a href="#" class="btn btn-xs btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a> &nbsp;
+                                <a href="#" class="btn btn-xs btn-outline-success" title="Cetak"><i class="fas fa-print"></i></a> &nbsp; 
+                                <button class="btn btn-xs btn-outline-danger" title="Hapus"><i class="fas fa-trash"></i></button>';
+                    }
+                ),
         );
 
         echo json_encode(
@@ -92,5 +69,10 @@ class Policy extends BaseController
                 'error' => false,
                 'message' => 'Successfully added new policy!'
             ]);
+    }
+
+    public function edit($id)
+    {
+
     }
 }
