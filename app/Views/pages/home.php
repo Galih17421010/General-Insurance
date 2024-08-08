@@ -9,10 +9,8 @@
         </div>
         <div class="row mb-2">
             <div class="col-sm-12">
-                <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-check"></i> Selamat Datang Kembali </h5>
-                </div>
+                
+                <embed src="https://github.com/Galih17421010" style="width:100%; height: 50vw;">
             </div>
         </div>
     </div>

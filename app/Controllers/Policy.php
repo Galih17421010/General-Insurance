@@ -27,13 +27,13 @@ class Policy extends BaseController
             "pass" =>$this->db->password,
             "db" =>$this->db->database,
         );
-        $table = "policys";
+        $table = "vw_policy";
         $primaryKey = 'id';
 
         $columns = array(
             array( 'db'=>'id', 'dt'=>0 ),
             array( 'db'=>'nama_nasabah', 'dt'=>1 ),
-            array( 'db'=>'periode_pertanggungan', 'dt'=>2 ),
+            array( 'db'=>'periode', 'dt'=>2),                 
             array( 'db'=>'kendaraan', 'dt'=>3 ),
             array( 'db'=>'harga', 'dt'=>4,
                     'formatter'=>function($d, $row){
@@ -74,7 +74,8 @@ class Policy extends BaseController
         
         $data = [
             'nama_nasabah' => $this->request->getPost('nama_nasabah'),
-            'periode_pertanggungan' => $this->request->getPost('periode_pertanggungan'),
+            'start_date' => $this->request->getPost('start_date'),
+            'end_date' => $this->request->getPost('end_date'),
             'kendaraan' => $this->request->getPost('kendaraan'),
             'harga' => $this->request->getPost('harga'),
             'jenis' => $this->request->getPost('jenis'),
@@ -94,16 +95,18 @@ class Policy extends BaseController
     {
         $db   = \Config\Database::connect();
 
-        $data = $db->query('SELECT id, nama_nasabah, periode_pertanggungan, kendaraan, harga, jenis, resiko,
-                                harga * IF ((  jenis = 1 ), 0.0015, 0.005 ) AS premi_kendaraan,
-                                harga * IF ((  resiko = 0 ), 0.0005, 0.0002 ) AS premi_resiko,
-                                (harga * IF ((  jenis = 1 ), 0.0015, 0.005 )) + ( harga * IF (( resiko = 0 ), 0.0005, 0.0002 )) AS total_premi 
+        $data = $db->query('SELECT id, nama_nasabah, concat(date_format(start_date, "%m/%d/%Y" )," - ",date_format(end_date, "%m/%d/%Y")) AS periode, kendaraan, harga, jenis, resiko,
+                                TIMESTAMPDIFF(YEAR, start_date, end_date) AS jumlah_periode,
+                                IF(TIMESTAMPDIFF(YEAR, start_date, end_date) = 0, 1, TIMESTAMPDIFF(YEAR, start_date, end_date)) * harga * IF ((  jenis = 1 ), 0.0015, 0.005 ) AS premi_kendaraan,
+                                IF(TIMESTAMPDIFF(YEAR, start_date, end_date) = 0, 1, TIMESTAMPDIFF(YEAR, start_date, end_date)) * harga * IF ((  resiko = 0 ), 0.0005, 0.0002 ) AS premi_resiko,
+                                (IF(TIMESTAMPDIFF(YEAR, start_date, end_date) = 0, 1, TIMESTAMPDIFF(YEAR, start_date, end_date)) * harga * IF ((  jenis = 1 ), 0.0015, 0.005 )) 
+                                + (IF(TIMESTAMPDIFF(YEAR, start_date, end_date) = 0, 1, TIMESTAMPDIFF(YEAR, start_date, end_date)) * harga * IF (( resiko = 0 ), 0.0005, 0.0002 )) AS total_premi 
                             FROM
                                 policys
                             WHERE id = '.$id.'')->getRow();
 
         $nama = $data->nama_nasabah;
-        $periode = $data->periode_pertanggungan;
+        $periode = $data->periode;
         $kendaraan = $data->kendaraan;
         $harga = number_format($data->harga,0);
         if($data->jenis == 1){

@@ -22,8 +22,8 @@
                     <button class="float-right btn btn-sm btn-outline-primary" id="btnCreate">Create New Policy</button>
                   </div>
                   <div class="card-body">
-                    <table class="table table-bordered table-hover" id="table-policy">
-                        <thead>
+                    <table class="table table-bordered" style="width:100%" id="table-policy">
+                        <thead style="text-align">
                             <tr>
                                 <th>No</th>
                                 <th>Nama Nasabah</th>
@@ -69,7 +69,10 @@
             <div class="col-sm-6">
                 <div class="form-group">
                 <label>Periode Pertanggungan</label>
-                <input type="text" class="form-control" name="periode_pertanggungan" id="periode_pertanggungan" placeholder="Tanggal Periode" required />
+                    <div class="form-inline">
+                        <input type="date" class="form-control" name="start_date" id="start_date" required/> &nbsp; <b> - </b> &nbsp;
+                        <input type="date" class="form-control" name="end_date" id="end_date" required/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,10 +130,19 @@ $(document).ready(function() {
         processing: true,
         servrside: true,
         scrollX: true,
+        responsive: true,
         ajax: {
             url:"<?= base_url('policy/new') ?>",
           },
-    
+    });
+
+    $('#end_date').change(function(){
+      var end = document.getElementById("end_date").value;
+      var start = document.getElementById("start_date").value;
+      if(end <= start){
+        Swal.fire("Peringatan !","Tanggal Akhir Periode harus Lebih Besar dari Tanggal Awal Periode");
+        $('#end_date').val('Y-m-d');
+      }
     });
 
     $('#btnCreate').click(function () {
@@ -140,30 +152,6 @@ $(document).ready(function() {
         $('#addModalLabel').html("Create New Policy ");
         $('#addNewModal').modal('show');
     });
-
-    $('#periode_pertanggungan').datepicker({
-        startView: 0,
-        minViewMode: 0,
-        maxViewMode: 2,
-        multidate: true,
-        multidateSeparator: "-",
-        autoClose: true,
-        beforeShowDay: highlightRange,
-    }).on("changeDate", function(event) {
-        var dates = event.dates,
-            elem = $('#date');
-        if (elem.data("selecteddates") == dates.join(",")) return;
-        if (dates.length > 2) dates = dates.splice(dates.length - 1);
-        dates.sort(function(a, b) { return new Date(a).getTime() - new Date(b).getTime() });
-        elem.data("selecteddates", dates.join(",")).datepicker('setDates', dates);
-    });
-    function highlightRange(date) {
-        var selectedDates = $('#date').datepicker('getDates');
-        if (selectedDates.length === 2 && date >= selectedDates[0] && date <= selectedDates[1]) {
-        return 'highlighted';
-        }
-        return '';
-    }
 
     $('#policyForm').submit(function(e) {
     e.preventDefault();
@@ -188,14 +176,7 @@ $(document).ready(function() {
                     });
                     $('#table-policy').DataTable().ajax.reload(null, false);
                 },
-                // error: function(response){
-                //     $('#simpan').html('Submit');
-                //     $('#policyForm').find(".print-error-msg").find("ul").html('');
-                //     $('#policyForm').find(".print-error-msg").css('display','block');
-                //     $.each( response.responseJSON.errors, function( key, value ) {
-                //         $('#policyForm').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-                //     });
-                // }
+                
         });
     });
 

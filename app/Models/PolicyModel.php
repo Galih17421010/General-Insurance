@@ -12,7 +12,7 @@ class PolicyModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nama_nasabah','periode_pertanggungan','kendaraan','harga','jenis','resiko'];
+    protected $allowedFields    = ['nama_nasabah','start_date','end_date','kendaraan','harga','jenis','resiko'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
