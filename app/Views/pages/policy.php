@@ -102,8 +102,8 @@
                 <div class="form-group">
                 <label>Resiko Pertanggungan</label>
                 <div class="form-inline">
-                    <input type="radio" name="resiko" id="resiko" value="0" checked='checked' /> Banjir &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 
-                    <input type="radio" name="resiko" id="resiko" value="1" /> Gempa
+                    <input type="radio" name="resiko" id="resiko" value="1" /> Banjir &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 
+                    <input type="radio" name="resiko" id="resiko" value="2" /> Gempa
                 </div>
                 </div>
             </div>
