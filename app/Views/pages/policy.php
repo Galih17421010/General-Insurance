@@ -18,7 +18,7 @@
                 <div class="card card-primary card-outline">
                   <div class="card-header">
                     <h5 class="card-title m-0"></h5>
-                    
+                    <img src="/assets/logo.jpg" style="max-width: 15%;"/>
                     <button class="float-right btn btn-sm btn-outline-primary" id="btnCreate">Create New Policy</button>
                   </div>
                   <div class="card-body">
@@ -102,8 +102,8 @@
                 <div class="form-group">
                 <label>Resiko Pertanggungan</label>
                 <div class="form-inline">
-                    <input type="radio" name="resiko" id="resiko" value="1" /> Banjir &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 
-                    <input type="radio" name="resiko" id="resiko" value="2" /> Gempa
+                    <input type="radio" name="resiko" id="resiko" value="0" /> Banjir &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 
+                    <input type="radio" name="resiko" id="resiko" value="1" /> Gempa
                 </div>
                 </div>
             </div>

@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 use App\Models\PolicyModel;
+use App\Models\ViewPolicy;
+use Dompdf\Dompdf;
 use Hermawan\DataTables\DataTable;
 use NumberFormatter;
 
@@ -37,7 +39,7 @@ class Policy extends BaseController
             array( 'db'=>'kendaraan', 'dt'=>3 ),
             array( 'db'=>'harga', 'dt'=>4,
                     'formatter'=>function($d, $row){
-                        return 'Rp '.number_format($row['harga'],2,",",".");                 
+                        return 'Rp '.number_format($row['harga'],0,",",".");                 
                     } ),
             array( 'db'=>'jenis', 'dt'=>5,
                     'formatter'=>function($d, $row){
@@ -50,7 +52,7 @@ class Policy extends BaseController
                     } ),
             array( 'db'=>'resiko', 'dt'=>6,
                     'formatter'=>function($d, $row){
-                        if ($row['resiko']==1) {
+                        if ($row['resiko']==0) {
                             return ' Banjir';
                         }else{
                             return ' Gempa';
@@ -92,6 +94,30 @@ class Policy extends BaseController
 
     public function show($id)
     {
+        $db   = \Config\Database::connect();
+
+        $query = $db->query('SELECT id, nama_nasabah, periode_pertanggungan, kendaraan, harga, jenis, resiko,
+                                harga * IF ((  jenis = 1 ), 0.0015, 0.005 ) AS premi_kendaraan,
+                                harga * IF ((  resiko = 0 ), 0.0005, 0.0002 ) AS premi_resiko,
+                                (harga * IF ((  jenis = 1 ), 0.0015, 0.005 )) + ( harga * IF (( resiko = 0 ), 0.0005, 0.0002 )) AS total_premi 
+                            FROM
+                                policys
+                            WHERE id = '.$id.'');
+        $data = $query->getRow();
+
+        $nama = $data->nama_nasabah;
+        $periode = $data->periode_pertanggungan;
+        $filename = $id. ' - Kb Insurance';
+
+        $dompdf = new Dompdf();
+
+        $dompdf->loadHtml(view('pages/print',compact('nama','periode')));
+
+        $dompdf->setPaper('A4', 'potrait');
+
+        $dompdf->render();
+
+        return $dompdf->stream($filename, ['Attachment'=>false]);
 
     }
 }
