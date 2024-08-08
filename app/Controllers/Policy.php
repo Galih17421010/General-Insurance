@@ -2,10 +2,8 @@
 
 namespace App\Controllers;
 use App\Models\PolicyModel;
-use App\Models\ViewPolicy;
 use Dompdf\Dompdf;
-use Hermawan\DataTables\DataTable;
-use NumberFormatter;
+
 
 class Policy extends BaseController
 {   
@@ -96,25 +94,36 @@ class Policy extends BaseController
     {
         $db   = \Config\Database::connect();
 
-        $query = $db->query('SELECT id, nama_nasabah, periode_pertanggungan, kendaraan, harga, jenis, resiko,
+        $data = $db->query('SELECT id, nama_nasabah, periode_pertanggungan, kendaraan, harga, jenis, resiko,
                                 harga * IF ((  jenis = 1 ), 0.0015, 0.005 ) AS premi_kendaraan,
                                 harga * IF ((  resiko = 0 ), 0.0005, 0.0002 ) AS premi_resiko,
                                 (harga * IF ((  jenis = 1 ), 0.0015, 0.005 )) + ( harga * IF (( resiko = 0 ), 0.0005, 0.0002 )) AS total_premi 
                             FROM
                                 policys
-                            WHERE id = '.$id.'');
-        $data = $query->getRow();
+                            WHERE id = '.$id.'')->getRow();
 
         $nama = $data->nama_nasabah;
         $periode = $data->periode_pertanggungan;
+        $kendaraan = $data->kendaraan;
+        $harga = number_format($data->harga,0);
+        if($data->jenis == 1){
+            $jenis = 'Comprehensive';
+        }else {
+            $jenis = 'Total Loss Only';
+        };
+        if ($data->resiko == 0) {
+            $resiko = 'Banjir';
+        }else {
+            $resiko = 'Gempa';
+        }
+        $premi_kendaraan = number_format($data->premi_kendaraan,0);
+        $premi_resiko = number_format($data->premi_resiko,0);
+        $total = number_format($data->total_premi,0);
+
         $filename = $id. ' - Kb Insurance';
-
         $dompdf = new Dompdf();
-
-        $dompdf->loadHtml(view('pages/print',compact('nama','periode')));
-
-        $dompdf->setPaper('A4', 'potrait');
-
+        $dompdf->loadHtml(view('pages/print',compact('nama','periode','kendaraan','harga','jenis','resiko','premi_kendaraan','premi_resiko','total')));
+        $dompdf->setPaper('A5', 'potrait');
         $dompdf->render();
 
         return $dompdf->stream($filename, ['Attachment'=>false]);
