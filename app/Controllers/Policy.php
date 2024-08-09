@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use App\Models\PolicyModel;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 class Policy extends BaseController

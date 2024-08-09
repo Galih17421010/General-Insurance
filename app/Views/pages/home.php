@@ -10,7 +10,7 @@
         <div class="row mb-2">
             <div class="col-sm-12">
                 
-                <embed src="https://github.com/Galih17421010" style="width:100%; height: 50vw;">
+                <embed src="<?=base_url('/assets/Galih Agus Saputra - Candidates Information dan APU PPT.pdf')?>" style="width:100%; height: 50vw;">
             </div>
         </div>
     </div>

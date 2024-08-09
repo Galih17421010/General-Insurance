@@ -1,15 +1,3 @@
-<?php 
-// $db      = \Config\Database::connect();
-// $id = $_POST["id"];
-// $builder = $db->table('policys')
-//           ->select('id, nama_nasabah, periode_pertanggungan, kendaraan, harga, jenis, resiko,
-//                     harga * IF ((  jenis = 1 ), 0.0015, 0.005 ) AS premi_kendaraan,
-//                     harga * IF ((  resiko = 0 ), 0.0005, 0.0002 ) AS premi_resiko,
-//                     (harga * IF ((  jenis = 1 ), 0.0015, 0.005 )) + ( harga * IF (( resiko = 0 ), 0.0005, 0.0002 )) AS total_premi ')
-//           ->where('id', $id)
-//           ->get();
-// $data   = mysqli_fetch_array($builder); 
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,7 +7,13 @@
     <title>Print - <?= $nama ?></title>
   </head>
   <body>
-  
+    <?php
+      $path = 'assets/logo.jpg';
+      $type = pathinfo($path, PATHINFO_EXTENSION);
+      $data = file_get_contents($path);
+      $imgbase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    ?>
+    <img src="<?= $imgbase64 ?>" style="max-width: 45%;" />
     <h4>General Information</h4>
     <label>Nama Tertanggung &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: <?= $nama ?></label><br />
     <label>Periode Pertanggungan &nbsp; &nbsp; &nbsp; &nbsp;: <?= $periode  ?></label><br />
@@ -32,8 +26,8 @@
     <br /><br />
     <h4>Premium Calculation</h4>
     <label>Periode Pertanggungan &nbsp; &nbsp; &nbsp; : <?= $periode  ?></label><br />
-    <label>Premi Kendaran &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: <?= $premi_kendaraan  ?></label><br />
-    <label> <?= $resiko  ?> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : <?= $premi_resiko  ?></label>
+    <label>Premi Kendaran &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: <?= $premi_kendaraan  ?>  </label><br />
+    <label> <?= $resiko ?> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : <?= $premi_resiko  ?></label>
     <br /><br />
     <h4>Total Premi &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : <?= $total  ?></h4>
   </body>
