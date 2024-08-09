@@ -51,4 +51,17 @@ class PolicyModel extends Model
     public function getItem($id) {
         return $this->find($id);
     }
+
+    public function updateItem($data,$id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('id', $id);
+        return $builder->update($data);
+    }
+
+    public function deleteItem($id)
+    {
+        $builder = $this->db->table($this->table);
+        return $builder->delete(['id' => $id]);
+    }
 }

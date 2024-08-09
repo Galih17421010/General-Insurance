@@ -51,7 +51,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="reset" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -134,6 +134,7 @@ $(document).ready(function() {
         ajax: {
             url:"<?= base_url('policy/new') ?>",
           },
+
     });
 
     $('#end_date').change(function(){
@@ -154,32 +155,81 @@ $(document).ready(function() {
     });
 
     $('#policyForm').submit(function(e) {
-    e.preventDefault();
-    let formData = new FormData(this);
-        $('#simpan').html('Sending...');
-            $.ajax({
-                type:'POST',
-                url: "<?= base_url('policy') ?>",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: (response) => {
-                    $('#simpan').html('Submit');
-                    $('#policyForm').trigger("reset");
-                    $('#addNewModal').modal('hide');
-                    Swal.fire({
-                        title: "Success",
-                        text: `${response.message}`,
-                        icon: "success",
-                        customClass: { confirmButton: "btn btn-success" },
-                        buttonsStyling: !1,
-                    });
-                    $('#table-policy').DataTable().ajax.reload(null, false);
-                },
-                
-        });
+        e.preventDefault();
+        let formData = new FormData(this);
+            $('#simpan').html('Sending...');
+                $.ajax({
+                    type: 'POST',
+                    url: "<?= base_url('policy') ?>",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                        $('#simpan').html('Submit');
+                        $('#policyForm').trigger("reset");
+                        $('#addNewModal').modal('hide');
+                        Swal.fire({
+                            title: "Success",
+                            text: `${response.message}`,
+                            icon: "success",
+                            customClass: { confirmButton: "btn btn-success" },
+                            buttonsStyling: !1,
+                        });
+                        $('#table-policy').DataTable().ajax.reload(null, false);
+                    },
+                    
+            });
     });
 
+    $('body').on('click', '#editBtn', function () {
+        var id = $(this).data('id');
+        $.get("<?= base_url('policy') ?>" +'/' + id +'/edit', function (data) {
+            $('#addModalLabel').html("Edit Policy");
+            $('#simpan').val("edit-policy");
+            $('#addNewModal').modal('show');
+            $('#id').val(data.id);
+            $('#nama_nasabah').val(data.nama_nasabah);
+            $('#kendaraan').val(data.kendaraan);
+            $('#harga').val(data.harga);
+            $('#jenis').val(data.jenis);
+            $('input[name="resiko"][value="'+data.resiko+'"]').attr('checked', true);
+            $('#start_date').val(data.start_date);
+            $('#end_date').val(data.end_date);
+        })
+    });
+
+    $('body').on('click', '#deleteBtn', function () {
+        var id = $(this).data("id");
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, deleted",
+            customClass: {
+                confirmButton: "btn btn-primary me-3",
+                cancelButton: "btn btn-label-secondary",
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "<?= base_url('policy') ?>"+"/"+id,
+                    type: "DELETE",
+                    data: {id},
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: `${response.message}`,
+                            icon: "success",
+                            customClass: { confirmButton: "btn btn-success" },
+                        });
+                        $('#table-policy').DataTable().ajax.reload(null, false);
+                    }
+                });
+            }
+        });
+    });
+    
 
 });
 </script>

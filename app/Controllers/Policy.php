@@ -11,6 +11,7 @@ class Policy extends BaseController
     public function __construct(){
         require_once APPPATH.'ThirdParty/ssp.php';
         $this->db = db_connect();
+        $this->policyModel = new PolicyModel();
     }
     public function index()
     {   
@@ -60,7 +61,9 @@ class Policy extends BaseController
                     } ),
             array( 'db'=>'id', 'dt'=>7,
                     'formatter'=>function($d, $row){
-                        return '<a href="/policy/'.$row['id'].'" target="blank" class="btn btn-xs btn-outline-success" title="Cetak"><i class="fas fa-print"> Print</i></a>
+                        return '<button class="btn btn-xs btn-outline-info" data-id="'.$row['id'].'" title="Edit" id="editBtn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-xs btn-outline-danger" data-id="'.$row['id'].'" title="Delete" id="deleteBtn"><i class="fas fa-trash"></i></button>
+                                <a href="/policy/'.$row['id'].'" target="blank" class="btn btn-xs btn-outline-success" title="Cetak"><i class="fas fa-print"> Print</i></a>
                         ';
                     }
                 ),
@@ -72,7 +75,7 @@ class Policy extends BaseController
     }
 
     public function create() {
-        
+        $id = $this->request->getPost('id');
         $data = [
             'nama_nasabah' => $this->request->getPost('nama_nasabah'),
             'start_date' => $this->request->getPost('start_date'),
@@ -81,15 +84,23 @@ class Policy extends BaseController
             'harga' => $this->request->getPost('harga'),
             'jenis' => $this->request->getPost('jenis'),
             'resiko' => $this->request->getPost('resiko'),
-            
         ];
-
-            $postModel = new PolicyModel();
-            $postModel->save($data);
-            return $this->response->setJSON([
-                'error' => false,
-                'message' => 'Successfully added new policy!'
-            ]);
+            
+        $postModel = new PolicyModel();
+            if($id == null){
+                $postModel->save($data);
+                return $this->response->setJSON([
+                    'error' => false,
+                    'message' => 'Successfully added new policy!'
+                ]);
+            }else {
+                $postModel->updateItem($data,$id);
+                return $this->response->setJSON([
+                    'error' => false,
+                    'message' => 'Successfully update policy!'
+                ]);
+            }
+            
     }
 
     public function show($id)
@@ -132,5 +143,15 @@ class Policy extends BaseController
 
         return $dompdf->stream($filename, ['Attachment'=>false]);
 
+    }
+
+    public function edit($id){
+        $item = $this->policyModel->getItem($id);
+        return $this->response->setJSON($item);
+    }
+
+    public function delete($id){
+        $policy = new PolicyModel();
+        $policy->deleteItem($id);
     }
 }
